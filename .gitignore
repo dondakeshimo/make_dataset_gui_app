@@ -1,1 +1,8 @@
 .python-version
+.DS_Store
+
+images/*
+!.gitkeep
+
+annotations/*
+!.gitkeep

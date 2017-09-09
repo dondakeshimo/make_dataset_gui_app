@@ -12,14 +12,14 @@ from xml.dom import minidom
 # pathの設定と画像拡張子の設定
 my_dir = os.path.abspath(os.path.dirname(__file__))
 os.chdir(my_dir)
-img_extension = [".png", ".jpg"]
+MAXCHECK = 19
 
 
 # 写真のサイズ調整
 def getSize(tup):
     x, y = tup
-    ratio_x = float(x / cvs_w)
-    ratio_y = float(y / cvs_h)
+    ratio_x = float(x) / cvs_w
+    ratio_y = float(y) / cvs_h
     if (ratio_x <= 1 and ratio_y<= 1):
         return (1, x, y)
     elif ratio_x > ratio_y:
@@ -39,19 +39,18 @@ class MainWindow():
         self.my_images=[]
         self.file_num = 0
         for img in os.listdir("./images"):
-            for ext in img_extension:
-                if img.endswith(ext):
-                    original = Image.open("./images/"+img)
-                    img_org_w, img_org_h = original.size
-                    ratio, img_w, img_h = getSize(original.size)
-                    resized = original.resize((img_w, img_h), Image.ANTIALIAS)
-                    self.my_images.append({
-                        "image":    ImageTk.PhotoImage(resized),
-                        "name":     img,
-                        "size":     (img_w, img_h),
-                        "org_size": (img_org_w, img_org_h),
-                        "ratio":    ratio
-                    })
+            if img.endswith(".png"):
+                original = Image.open("./images/"+img).convert("RGB")
+                img_org_w, img_org_h = original.size
+                ratio, img_w, img_h = getSize(original.size)
+                resized = original.resize((img_w, img_h), Image.ANTIALIAS)
+                self.my_images.append({
+                "image":    ImageTk.PhotoImage(resized),
+                "name":     img,
+                "size":     (img_w, img_h),
+                "org_size": (img_org_w, img_org_h),
+                "ratio":    ratio
+                })
 
         # 初期化群
         self.my_image_number = 0
@@ -83,7 +82,7 @@ class MainWindow():
 
         self.message_num = Entry(width=40)
         self.message_num.insert(
-            END, ("This image is " + self.my_images[self.my_image_number]["name"]))
+            END, (self.my_images[self.my_image_number]["name"]))
         self.message_num.grid(row=1, column=6, columnspan=3)
 
         self.frame = Frame(main, width=scr_w-cvs_w-10, height=scr_h-20)
@@ -189,7 +188,7 @@ class MainWindow():
             self.image_on_canvas, image=self.my_images[self.my_image_number]["image"])
 
         # チェックボタンを隠す
-        for num in range(1,11):
+        for num in range(1,MAXCHECK):
             self.checkbuttons["chbutton"][num].lower()
 
         # 画像の名前更新
@@ -214,7 +213,7 @@ class MainWindow():
             self.image_on_canvas, image=self.my_images[self.my_image_number]["image"])
 
         # チェックボタンを隠す
-        for num in range(1,11):
+        for num in range(1, MAXCHECK):
             self.checkbuttons["chbutton"][num].lower()
 
         # 画像の名前更新
@@ -265,7 +264,7 @@ class MainWindow():
             self.image_on_canvas, image=self.my_images[self.my_image_number]["image"])
 
         # チェックボタンを隠す
-        for num in range(1,11):
+        for num in range(1, MAXCHECK):
             self.checkbuttons["chbutton"][num].lower()
 
 
