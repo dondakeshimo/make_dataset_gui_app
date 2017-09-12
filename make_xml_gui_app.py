@@ -12,7 +12,7 @@ from xml.dom import minidom
 # pathの設定と画像拡張子の設定
 my_dir = os.path.abspath(os.path.dirname(__file__))
 os.chdir(my_dir)
-MAXCHECK = 22
+MAXCHECK = 24
 
 
 # 写真のサイズ調整
@@ -67,18 +67,18 @@ class MainWindow():
             0, 0, anchor=NW, image=self.my_images[self.my_image_number]["image"])
 
         # 右側の各ボタンの作成
-        self.button_next = Button(
-            main, text="Next >>", command=self.onNextButton, width=5, height=1)
-        self.button_next.grid(row=20, column=8)
-        self.button_back = Button(
-            main, text="<< Back", command=self.onBackButton, width=5, height=1)
-        self.button_back.grid(row=20, column=6)
+        # self.button_next = Button(
+        #     main, text="Next >>", command=self.onNextButton, width=5, height=1)
+        # self.button_next.grid(row=20, column=8)
+        # self.button_back = Button(
+        #     main, text="<< Back", command=self.onBackButton, width=5, height=1)
+        # self.button_back.grid(row=20, column=6)
+        self.button_clear = Button(
+            main, text="Clear", command=self.onClearButton, width=5, height=1)
+        self.button_clear.grid(row=20, column=6)
         self.button_save = Button(
             main, text="Save", command=self.onSaveButton, width=5, height=1)
         self.button_save.grid(row=20, column=7)
-        self.button_clear = Button(
-            main, text="Clear", command=self.onClearButton, width=5, height=1)
-        self.button_clear.grid(row=19, column=7)
 
         self.message_num = Entry(width=40)
         self.message_num.insert(
@@ -92,11 +92,11 @@ class MainWindow():
 
         self.checkbuttons = {"bool": [0, ], "chbutton": [0, ]}
 
-        for num in range(1, MAXCHECK + 1):
+        for num in range(1, MAXCHECK):
             b = BooleanVar()
             b.set(False)
             self.checkbuttons["bool"].append(b)
-            if num <= 10:
+            if num <= 12:
                 c = Checkbutton(
                     text="Person"+str(num), variable=self.checkbuttons["bool"][num])
                 c.pack(in_=self.frame1)
@@ -170,17 +170,21 @@ class MainWindow():
         self.person_counter += 1
 
         # 矩形描画
-        self.canvas.create_rectangle(
-            self.xmin, self.ymin, self.xmax, self.ymax, tags="Person")
-        self.canvas.create_text(
-            self.xmin+5, self.ymin+5,
-            text=str(self.person_counter), tags="Person")
+        if self.person_counter < MAXCHECK:
+            self.canvas.create_rectangle(
+                self.xmin, self.ymin, self.xmax, self.ymax, tags="Person")
+            self.canvas.create_text(
+                self.xmin+5, self.ymin+5,
+                text=str(self.person_counter), tags="Person")
 
-        # 矩形の頂点座標の格納とチェックボタンの呼び出し
-        r = self.my_images[self.my_image_number]["ratio"]
-        self.person_coords.append(
-            (int(self.xmin*r), int(self.ymin*r), int(self.xmax*r), int(self.ymax*r)))
-        self.checkbuttons["chbutton"][self.person_counter].lift()
+            # 矩形の頂点座標の格納とチェックボタンの呼び出し
+            r = self.my_images[self.my_image_number]["ratio"]
+            self.person_coords.append(
+                (int(self.xmin*r), int(self.ymin*r), int(self.xmax*r), int(self.ymax*r)))
+            self.checkbuttons["chbutton"][self.person_counter].lift()
+        else:
+            showinfo(message="You select too many people")
+            return
 
 
     # [<<Back]を押した時
