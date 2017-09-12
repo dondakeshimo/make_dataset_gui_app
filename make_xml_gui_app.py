@@ -12,7 +12,7 @@ from xml.dom import minidom
 # pathの設定と画像拡張子の設定
 my_dir = os.path.abspath(os.path.dirname(__file__))
 os.chdir(my_dir)
-MAXCHECK = 19
+MAXCHECK = 22
 
 
 # 写真のサイズ調整
@@ -85,19 +85,30 @@ class MainWindow():
             END, (self.my_images[self.my_image_number]["name"]))
         self.message_num.grid(row=1, column=6, columnspan=3)
 
-        self.frame = Frame(main, width=scr_w-cvs_w-10, height=scr_h-20)
-        self.frame.grid(row=4, column=6, rowspan=13, columnspan=3)
+        self.frame1 = Frame(main, width=scr_w-cvs_w-10, height=scr_h-20)
+        self.frame1.grid(row=4, column=6, rowspan=13, columnspan=1)
+        self.frame2 = Frame(main, width=scr_w-cvs_w-10, height=scr_h-20)
+        self.frame2.grid(row=4, column=7, rowspan=13, columnspan=1)
 
         self.checkbuttons = {"bool": [0, ], "chbutton": [0, ]}
-        for num in range(1,20):
+
+        for num in range(1, MAXCHECK + 1):
             b = BooleanVar()
             b.set(False)
             self.checkbuttons["bool"].append(b)
-            c = Checkbutton(
-                text="Person"+str(num), variable=self.checkbuttons["bool"][num])
-            c.pack(in_=self.frame)
-            c.lower()
-            self.checkbuttons["chbutton"].append(c)
+            if num <= 10:
+                c = Checkbutton(
+                    text="Person"+str(num), variable=self.checkbuttons["bool"][num])
+                c.pack(in_=self.frame1)
+                c.lower()
+                self.checkbuttons["chbutton"].append(c)
+            else:
+                c = Checkbutton(
+                    text="Person"+str(num), variable=self.checkbuttons["bool"][num])
+                c.pack(in_=self.frame2)
+                c.lower()
+                self.checkbuttons["chbutton"].append(c)
+
 
 
 # 以降、callback関数
