@@ -66,13 +66,13 @@ class MainWindow():
         self.image_on_canvas = self.canvas.create_image(
             0, 0, anchor=NW, image=self.my_images[self.my_image_number]["image"])
 
-        # 右側の各ボタンの作成
-        # self.button_next = Button(
-        #     main, text="Next >>", command=self.onNextButton, width=5, height=1)
-        # self.button_next.grid(row=20, column=8)
-        # self.button_back = Button(
-        #     main, text="<< Back", command=self.onBackButton, width=5, height=1)
-        # self.button_back.grid(row=20, column=6)
+        右側の各ボタンの作成
+        self.button_next = Button(
+            main, text="Next >>", command=self.onNextButton, width=5, height=1)
+        self.button_next.grid(row=20, column=8)
+        self.button_back = Button(
+            main, text="<< Back", command=self.onBackButton, width=5, height=1)
+        self.button_back.grid(row=20, column=6)
         self.button_clear = Button(
             main, text="Clear", command=self.onClearButton, width=5, height=1)
         self.button_clear.grid(row=20, column=6)
